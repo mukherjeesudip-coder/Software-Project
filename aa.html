@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CivicDesk – Smart Community Service Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef3f5;--surf:#fff;--ink:#12222c;--mute:#5a6a75;--line:#d6e0e5;--pri:#0b5c7a;--on:#fff;--soft:#e2f0f5;
+--c1:#9a6410;--c2:#6741b5;--c3:#0b5c7a;--c4:#26784f;--bad:#b42d2d;--star:#d98e04;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e171d;--surf:#16232b;--ink:#e6eef2;--mute:#9db0bb;--line:#26373f;--pri:#4cb3d6;--on:#06222d;--soft:#173443;--c1:#e8b04e;--c2:#b79af0;--c3:#5bbbe0;--c4:#62c493;--bad:#f08080;--star:#f2b33d}}
+:root[data-theme="dark"]{--bg:#0e171d;--surf:#16232b;--ink:#e6eef2;--mute:#9db0bb;--line:#26373f;--pri:#4cb3d6;--on:#06222d;--soft:#173443;--c1:#e8b04e;--c2:#b79af0;--c3:#5bbbe0;--c4:#62c493;--bad:#f08080;--star:#f2b33d}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Public Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--pri);color:var(--on);display:flex;gap:14px;align-items:center;flex-wrap:wrap;padding:10px 20px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--pri);z-index:10}
+.brand{font-weight:800;font-size:20px;letter-spacing:-.02em;margin-right:auto}
+.brand small{display:block;font-weight:500;font-size:11px;opacity:.85;letter-spacing:0}
+.seg{display:flex;background:rgba(0,0,0,.2);border-radius:10px;padding:3px}
+.seg button{border:0;background:none;color:inherit;padding:6px 14px;border-radius:8px;cursor:pointer;font-weight:600}
+.seg button[aria-pressed="true"]{background:var(--surf);color:var(--pri)}
+.ib{border:1px solid rgba(255,255,255,.4);background:none;color:inherit;border-radius:10px;padding:6px 11px;cursor:pointer;font-weight:600}
+.badge{background:var(--bad);color:#fff;border-radius:99px;font-size:11px;padding:1px 7px;margin-left:5px}
+main{max-width:1080px;margin:0 auto;padding:20px}
+h1{font-size:26px;letter-spacing:-.02em;margin:4px 0 4px}
+h2{font-size:17px;margin:0 0 12px}
+.sub{color:var(--mute);margin:0 0 18px;max-width:62ch}
+.grid2{display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);gap:20px;align-items:start}
+@media(max-width:820px){.grid2{grid-template-columns:1fr}}
+.panel{background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:16px}
+label{display:block;font-weight:600;font-size:13px;margin:12px 0 4px}
+input,select,textarea{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+textarea{min-height:84px;resize:vertical}
+:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
+.btn{background:var(--pri);color:var(--on);border:0;border-radius:8px;padding:9px 16px;font-weight:700;cursor:pointer}
+.btn.alt{background:var(--soft);color:var(--pri)}
+.btn.sm{padding:6px 11px;font-size:13px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:16px}
+.stat{background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.stat b{display:block;font-size:28px;line-height:1.1;letter-spacing:-.02em}
+.stat span{color:var(--mute);font-size:13px}
+.bars{display:grid;gap:7px}
+.bar{display:grid;grid-template-columns:110px 1fr 28px;gap:8px;align-items:center;font-size:13px}
+.bar i{display:block;height:10px;border-radius:5px;background:var(--pri)}
+.bar div{background:var(--soft);border-radius:5px}
+.cards{display:grid;gap:12px}
+.card{background:var(--surf);border:1px solid var(--line);border-left:5px solid var(--sc,var(--line));border-radius:12px;padding:14px 16px}
+.card h3{margin:0;font-size:16px}
+.meta{color:var(--mute);font-size:12.5px}
+.pill{display:inline-block;font-size:12px;font-weight:700;padding:2px 10px;border-radius:99px;color:var(--sc);border:1.5px solid var(--sc);white-space:nowrap}
+.top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.step{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin:10px 0 4px}
+.step i{height:5px;border-radius:3px;background:var(--line)}
+.step i.on{background:var(--sc)}
+.cap{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;font-size:10px;color:var(--mute);text-align:center}
+.card img{max-width:100%;max-height:170px;border-radius:8px;margin-top:8px;display:block}
+.acts{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.acts select{width:auto}
+.stars button{border:0;background:none;font-size:22px;cursor:pointer;color:var(--line);padding:0 2px}
+.stars button.on{color:var(--star)}
+.empty{padding:28px;text-align:center;color:var(--mute);border:1.5px dashed var(--line);border-radius:12px}
+.filters{display:grid;grid-template-columns:1fr 160px 160px;gap:8px;margin-bottom:12px}
+@media(max-width:620px){.filters{grid-template-columns:1fr}}
+#notes{position:fixed;right:16px;top:calc(64px + env(safe-area-inset-top,0px));width:min(360px,calc(100% - 32px));max-height:60vh;overflow:auto;z-index:20;box-shadow:0 8px 30px rgba(0,0,0,.25)}
+#notes p{margin:0;padding:9px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+#notes p:last-child{border:0}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:10px;font-weight:600;z-index:30}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">CivicDesk<small>Smart community service management</small></div>
+  <div class="seg" role="group" aria-label="Switch demo role" id="roles"></div>
+  <button class="ib" id="bell" aria-label="Notifications">Alerts<span class="badge" id="cnt" hidden></span></button>
+  <button class="ib" id="theme" aria-label="Toggle theme">Theme</button>
+</header>
+<div class="panel" id="notes" hidden></div>
+<main id="app"></main>
+<div id="toast" hidden></div>
+<script>
+const CATS = ["Roads & potholes", "Waste & sanitation", "Water & drainage", "Streetlights", "Parks & public space", "Other"];
+const STS = ["Submitted", "Assigned", "In progress", "Resolved", "Rejected", "Closed"];
+const SC = ["var(--c1)", "var(--c2)", "var(--c3)", "var(--c4)", "var(--bad)", "var(--mute)"];
+
+// Expanded to 6 service staff members matching all 6 categories
+const STAFF = [
+  { id: "s1", name: "R. Mukherjee", department: "Roads & potholes" },
+  { id: "s2", name: "P. Sen", department: "Waste & sanitation" },
+  { id: "s3", name: "A. Khan", department: "Water & drainage" },
+  { id: "s4", name: "S. Roy", department: "Streetlights" },
+  { id: "s5", name: "M. Das", department: "Parks & public space" },
+  { id: "s6", name: "V. Sharma", department: "Other" }
+];
+
+const KEY = "civicdesk.v3";
+const day = 864e5, now = Date.now();
+
+const seed = () => ({
+  c: [
+    {
+      id: 1041, title: "Deep pothole near market gate", cat: CATS[0], desc: "Two-wheelers are swerving around a pothole about half a metre wide.", 
+      locationText: "Market Road, Gate 2", latitude: 22.57264, longitude: 88.36389, who: "me", st: 3, staff: "s1", at: now-6*day, up: now-1*day, rating: 4, fb: "Fixed quickly, thank you.",
+      history: [{status: 0, note: "Submitted by citizen", changedAt: now-6*day}, {status: 1, note: "Assigned to R. Mukherjee", changedAt: now-5*day}, {status: 2, note: "Work started", changedAt: now-4*day}, {status: 3, note: "Marked resolved", changedAt: now-1*day}]
+    },
+    {
+      id: 1042, title: "Streetlight out on Lake Lane", cat: CATS[3], desc: "The lamp has been dark for a week. The lane is unsafe after 7 pm.", 
+      locationText: "Lake Lane, pole 14", latitude: 22.58000, longitude: 88.37000, who: "me", st: 2, staff: "s4", at: now-3*day, up: now-1*day,
+      history: [{status: 0, note: "Submitted", changedAt: now-3*day}, {status: 1, note: "Assigned to S. Roy", changedAt: now-2*day}, {status: 2, note: "In progress", changedAt: now-1*day}]
+    },
+    {
+      id: 1043, title: "Overflowing bin at bus stop", cat: CATS[1], desc: "Waste has not been collected for four days.", 
+      locationText: "Station Bus Stop", latitude: 22.56000, longitude: 88.35000, who: "other", st: 0, at: now-1*day, up: now-1*day,
+      history: [{status: 0, note: "Submitted", changedAt: now-1*day}]
+    }
+  ],
+  n: [{notificationId: 1, r: "citizen", message: "Complaint #1042 is now In progress.", t: now-day, isRead: 0}],
+  next: 1044
+});
+
+let D; try { D = JSON.parse(localStorage.getItem(KEY)); } catch(e) {}
+if (!D || !D.c) D = seed();
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(D)); } catch(e) {} };
+let role = "citizen", staffId = "s1", F = {q:"", st:"", cat:""};
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fd = t => new Date(t).toLocaleDateString(undefined,{day:"numeric",month:"short"});
+const toast = m => { const t = $("#toast"); t.textContent = m; t.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(() => t.hidden = true, 2400); };
+const note = (r, message) => { D.n.unshift({notificationId: D.n.length + 1, r, message, t: Date.now(), isRead: 1}); };
+const getStaffObj = id => STAFF.find(s => s.id === id);
+const sname = id => {
+  const s = getStaffObj(id);
+  return s ? `${s.name} (${s.department})` : "Unassigned";
+};
+
+function logStatus(c, newSt, noteText) {
+  c.st = newSt;
+  c.up = Date.now();
+  if(!c.history) c.history = [];
+  c.history.push({status: newSt, note: noteText || `Status updated to ${STS[newSt]}`, changedAt: Date.now()});
+}
+
+function setStatus(c, st) {
+  const oldSt = c.st;
+  logStatus(c, st, `Status changed from ${STS[oldSt]} to ${STS[st]}`);
+  const m = `Complaint #${c.id} is now ${STS[st]}.`;
+  note(c.who === "me" ? "citizen" : "x", m);
+  if (c.staff && st < 2) note("staff:" + c.staff, `You were assigned #${c.id}: ${c.title}.`);
+  if (st === 3) note("admin", `#${c.id} was resolved by ${sname(c.staff)}.`);
+  if (st === 4) note("admin", `#${c.id} was rejected as invalid/duplicate.`);
+  if (st === 5) note("admin", `#${c.id} was closed.`);
+  save();
+}
+
+function card(c, mode) {
+  const col = SC[c.st];
+  let acts = "";
+  if (mode === "citizen" && c.st === 3) {
+    acts = c.rating ? 
+      `<span class="meta">You rated this ${"★".repeat(c.rating)}${c.fb ? " – “" + esc(c.fb) + "”" : ""}</span> <button class="btn alt sm" data-act="reopen" data-id="${c.id}">Reopen Issue</button>` :
+      `<div class="stars" data-id="${c.id}"><span class="meta">Rate the fix:</span>${[1,2,3,4,5].map(n=>`<button data-act="rate" data-n="${n}" data-id="${c.id}" aria-label="${n} stars">★</button>`).join("")}</div>
+       <button class="btn alt sm" data-act="reopen" data-id="${c.id}">Not Satisfied (Reopen)</button>`;
+  }
+  if (mode === "admin") {
+    acts = `<select data-act="assign" data-id="${c.id}" aria-label="Assign staff">
+      <option value="">Assign staff…</option>
+      ${STAFF.map(s => {
+        const isMatch = s.department === c.cat ? " ★ (Dept Match)" : "";
+        return `<option value="${s.id}" ${c.staff === s.id ? "selected" : ""}>${esc(s.name)} [${esc(s.department)}]${isMatch}</option>`;
+      }).join("")}
+    </select>
+    <select data-act="status" data-id="${c.id}" aria-label="Change status">
+      ${STS.map((s, i) => `<option value="${i}" ${c.st === i ? "selected" : ""}>${s}</option>`).join("")}
+    </select>`;
+  }
+  if (mode === "staff") {
+    acts = c.st === 1 ? `<button class="btn sm" data-act="next" data-id="${c.id}">Start work</button>` :
+         c.st === 2 ? `<button class="btn sm" data-act="next" data-id="${c.id}">Mark resolved</button>` :
+         `<span class="meta">${c.st >= 3 ? "Completed/Closed" : "Awaiting assignment"}</span>`;
+  }
+
+  const gpsInfo = c.latitude && c.longitude ? ` · Lat/Lng: ${c.latitude.toFixed(4)}, ${c.longitude.toFixed(4)}` : "";
+
+  return `<article class="card" style="--sc:${col}">
+  <div class="top"><div><h3>#${c.id} ${esc(c.title)}</h3><div class="meta">${esc(c.cat)} · ${esc(c.locationText)}${gpsInfo} · filed ${fd(c.at)}</div></div><span class="pill">${STS[c.st]}</span></div>
+  <p style="margin:8px 0 0">${esc(c.desc)}</p>
+  ${c.img ? `<img src="${c.img}" alt="Photo attached to complaint ${c.id}">` : ""}
+  <div class="step" aria-hidden="true">${STS.map((_, i) => `<i class="${i <= c.st ? "on" : ""}"></i>`).join("")}</div>
+  <div class="cap" aria-hidden="true">${STS.map(s => `<span>${s}</span>`).join("")}</div>
+  <div class="meta" style="margin-top:6px">Handler: ${esc(sname(c.staff))} · updated ${fd(c.up)}</div>
+  ${acts ? `<div class="acts">${acts}</div>` : ""}</article>`;
+}
+
+function renderCitizen() {
+  $("#app").innerHTML = `<h1>Report a community issue</h1><p class="sub">Describe the problem, pin your GPS coordinates, and track progress through resolution or review.</p>
+  <div class="grid2"><form class="panel" id="f" autocomplete="off"><h2>New complaint</h2>
+   <label for="t">Title</label><input id="t" required maxlength="80" placeholder="e.g. Broken streetlight on Park Road">
+   <label for="cat">Category</label><select id="cat">${CATS.map(c => `<option>${esc(c)}</option>`).join("")}</select>
+   <label for="d">What’s wrong?</label><textarea id="d" required maxlength="400"></textarea>
+   <label for="l">Location Text</label><input id="l" required placeholder="Street, landmark or ward">
+   <label for="lat">Latitude & Longitude</label><div class="row" style="flex-wrap:nowrap"><input id="lat" placeholder="Latitude" type="number" step="any"><input id="lng" placeholder="Longitude" type="number" step="any"><button type="button" class="btn alt sm" id="gps">Get GPS</button></div>
+   <label for="im">Photo (optional)</label><input id="im" type="file" accept="image/*">
+   <div style="margin-top:16px"><button class="btn" type="submit">Submit complaint</button></div></form>
+   <section><h2>My complaints</h2><div class="cards" id="mine"></div></section></div>`;
+  mine();
+  $("#gps").onclick = () => {
+    if (!navigator.geolocation) return toast("GPS isn’t available on this device.");
+    navigator.geolocation.getCurrentPosition(p => {
+      $("#lat").value = p.coords.latitude.toFixed(5);
+      $("#lng").value = p.coords.longitude.toFixed(5);
+      $("#l").value = `GPS Location (${p.coords.latitude.toFixed(3)}, ${p.coords.longitude.toFixed(3)})`;
+      toast("GPS pinned successfully.");
+    }, () => toast("Location blocked. Type the address instead."));
+  };
+  $("#f").onsubmit = async e => {
+    e.preventDefault();
+    const c = {
+      id: D.next++,
+      title: $("#t").value.trim(),
+      cat: $("#cat").value,
+      desc: $("#d").value.trim(),
+      locationText: $("#l").value.trim(),
+      latitude: parseFloat($("#lat").value) || null,
+      longitude: parseFloat($("#lng").value) || null,
+      who: "me",
+      st: 0,
+      at: Date.now(),
+      up: Date.now(),
+      history: [{status: 0, note: "Complaint submitted by citizen", changedAt: Date.now()}]
+    };
+    const f = $("#im").files[0]; if (f) c.img = await shrink(f);
+    D.c.unshift(c);
+    note("admin", `New complaint #${c.id}: ${c.title}.`);
+    note("citizen", `Complaint #${c.id} was received.`);
+    save(); badge(); toast("Complaint submitted."); renderCitizen();
+  };
+}
+
+function mine() {
+  const l = D.c.filter(c => c.who === "me");
+  $("#mine").innerHTML = l.length ? l.map(c => card(c, "citizen")).join("") : `<div class="empty">Nothing reported yet. Use the form to file your first complaint.</div>`;
+}
+
+function shrink(f) {
+  return new Promise(r => {
+    const fr = new FileReader();
+    fr.onload = () => {
+      const im = new Image();
+      im.onload = () => {
+        const k = Math.min(1, 480 / Math.max(im.width, im.height)), cv = document.createElement("canvas");
+        cv.width = im.width * k; cv.height = im.height * k;
+        cv.getContext("2d").drawImage(im, 0, 0, cv.width, cv.height);
+        r(cv.toDataURL("image/jpeg", .6));
+      };
+      im.onerror = () => r("");
+      im.src = fr.result;
+    };
+    fr.onerror = () => r("");
+    fr.readAsDataURL(f);
+  });
+}
+
+function renderAdmin() {
+  const n = D.c.length, res = D.c.filter(c => c.st === 3 || c.st === 5).length, rt = D.c.filter(c => c.rating);
+  const avg = rt.length ? (rt.reduce((a, c) => a + c.rating, 0) / rt.length).toFixed(1) : "–";
+  const mx = Math.max(1, ...CATS.map(k => D.c.filter(c => c.cat === k).length));
+  
+  $("#app").innerHTML = `<h1>Administrator dashboard</h1><p class="sub">Manage users, oversee categories, review state logs, and inspect complaints across the smart community.</p>
+  <div class="stats"><div class="stat"><b>${n}</b><span>Total complaints</span></div><div class="stat"><b>${D.c.filter(c => c.st < 3).length}</b><span>Open/Active</span></div><div class="stat"><b>${n ? Math.round(res/n*100) : 0}%</b><span>Resolved/Closed</span></div><div class="stat"><b>${avg}</b><span>Average rating</span></div></div>
+  <div class="grid2" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)"><div class="panel"><h2>By category</h2><div class="bars">${CATS.map(k => {const v = D.c.filter(c => c.cat === k).length; return `<div class="bar"><span>${esc(k)}</span><div><i style="width:${v/mx*100}%"></i></div><b>${v}</b></div>`;}).join("")}</div></div>
+  <div class="panel"><h2>By status</h2><div class="bars">${STS.map((s, i) => {const v = D.c.filter(c => c.st === i).length; return `<div class="bar"><span>${s}</span><div><i style="width:${v/Math.max(1,n)*100}%;background:${SC[i]}"></i></div><b>${v}</b></div>`;}).join("")}</div></div></div>
+  <h2 style="margin-top:22px">All complaints</h2>
+  <div class="filters"><input id="q" type="search" placeholder="Search title, place or ID" value="${esc(F.q)}" aria-label="Search"><select id="fs" aria-label="Filter status"><option value="">All statuses</option>${STS.map((s, i) => `<option value="${i}" ${F.st === String(i) ? "selected" : ""}>${s}</option>`).join("")}</select><select id="fc" aria-label="Filter category"><option value="">All categories</option>${CATS.map(k => `<option ${F.cat === k ? "selected" : ""}>${esc(k)}</option>`).join("")}</select></div>
+  <div class="cards" id="all"></div>
+  <p class="meta" style="margin-top:18px"><button class="btn alt sm" id="reset">Reset demo data</button></p>`;
+  all();
+  $("#q").oninput = e => { F.q = e.target.value; all(); };
+  $("#fs").onchange = e => { F.st = e.target.value; all(); };
+  $("#fc").onchange = e => { F.cat = e.target.value; all(); };
+  $("#reset").onclick = () => { D = seed(); save(); badge(); render(); toast("Demo data restored."); };
+}
+
+function all() {
+  const q = F.q.toLowerCase();
+  const l = D.c.filter(c => (!F.st || c.st == F.st) && (!F.cat || c.cat === F.cat) && (!q || (c.title + c.locationText + c.id + c.desc).toLowerCase().includes(q)));
+  $("#all").innerHTML = l.length ? l.map(c => card(c, "admin")).join("") : `<div class="empty">No complaints match these filters.</div>`;
+}
+
+function renderStaff() {
+  $("#app").innerHTML = `<h1>Staff tasks</h1><p class="sub">Work through assigned service tasks and update their progression lifecycle.</p>
+  <div style="max-width:320px;margin-bottom:14px"><label for="sp" style="margin-top:0">Viewing as staff member</label><select id="sp">${STAFF.map(s => `<option value="${s.id}" ${s.id === staffId ? "selected" : ""}>${esc(s.name)} [${esc(s.department)}]</option>`).join("")}</select></div><div class="cards" id="tasks"></div>`;
+  tasks();
+  $("#sp").onchange = e => { staffId = e.target.value; badge(); tasks(); };
+}
+
+function tasks() {
+  const l = D.c.filter(c => c.staff === staffId).sort((a, b) => a.st - b.st);
+  $("#tasks").innerHTML = l.length ? l.map(c => card(c, "staff")).join("") : `<div class="empty">No tasks assigned to this staff member yet.</div>`;
+}
+
+const myKey = () => role === "staff" ? "staff:" + staffId : role;
+function badge() {
+  const u = D.n.filter(n => n.r === myKey() && n.isRead).length;
+  const b = $("#cnt"); b.textContent = u; b.hidden = !u;
+}
+
+function render() {
+  $("#roles").innerHTML = [["citizen", "Citizen"], ["admin", "Admin"], ["staff", "Staff"]].map(([k, v]) => `<button data-role="${k}" aria-pressed="${role === k}">${v}</button>`).join("");
+  ({citizen: renderCitizen, admin: renderAdmin, staff: renderStaff})[role]();
+  badge(); $("#notes").hidden = true;
+}
+
+document.addEventListener("click", e => {
+  const r = e.target.closest("[data-role]"); if (r) { role = r.dataset.role; render(); return; }
+  const a = e.target.closest("[data-act]"); if (!a) return;
+  const c = D.c.find(x => x.id == a.dataset.id); if (!c) return;
+  
+  if (a.dataset.act === "rate") {
+    const fb = prompt("Add a short comment (optional)") || "";
+    c.rating = +a.dataset.n; c.fb = fb.slice(0, 120);
+    setStatus(c, 5);
+    mine(); toast("Thanks for your feedback! Issue closed.");
+  }
+  if (a.dataset.act === "reopen") {
+    setStatus(c, 2);
+    mine(); toast("Issue reopened for review.");
+  }
+  if (a.dataset.act === "next") {
+    setStatus(c, c.st + 1); tasks(); badge(); toast(`Marked as ${STS[c.st]}.`);
+  }
+});
+
+document.addEventListener("change", e => {
+  const a = e.target.dataset.act; if (!a) return;
+  const c = D.c.find(x => x.id == e.target.dataset.id); if (!c) return;
+  if (a === "assign") {
+    c.staff = e.target.value || undefined;
+    if (c.staff && c.st === 0) setStatus(c, 1);
+    else { note("staff:" + c.staff, `You were assigned #${c.id}: ${c.title}.`); save(); }
+    toast("Assignment saved."); all();
+  }
+  if (a === "status") { setStatus(c, +e.target.value); toast("Status updated."); all(); }
+});
+
+$("#bell").onclick = () => {
+  const p = $("#notes"), k = myKey();
+  if (!p.hidden) { p.hidden = true; return; }
+  const l = D.n.filter(n => n.r === k);
+  p.innerHTML = `<h2>Alerts</h2>` + (l.length ? l.slice(0, 20).map(n => `<p>${esc(n.message)} <span class="meta">${fd(n.t)}</span></p>`).join("") : `<p class="meta">No alerts yet.</p>`);
+  p.hidden = false;
+  D.n.forEach(n => { if (n.r === k) n.isRead = 0; });
+  save(); badge();
+};
+
+$("#theme").onclick = () => {
+  const d = document.documentElement, dark = getComputedStyle(d).getPropertyValue("--bg").trim() === "#0e171d";
+  d.dataset.theme = dark ? "light" : "dark";
+};
+
+render();
+</script>
+</body>
+</html>
